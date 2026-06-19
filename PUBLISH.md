@@ -56,11 +56,11 @@ review (typically several days). Start this in parallel once the client says go.
 ---
 
 ## Production hardening (before real scale)
-- **Database:** SQLite is fine for the pilot, but on Render the web service and the
-  cron run on separate instances with ephemeral disks — they won't share `farmers.db`.
-  For production, swap `store.py` to **Postgres** (Render offers a free Postgres add-on).
-  The `store.py` interface stays the same; only the connection changes.
-- **Secrets:** never commit `.env`; set everything in the Render dashboard.
+- **Database:** ✅ Done. `render.yaml` provisions a free **Postgres** database and
+  wires `DATABASE_URL` into both the web service and the cron, so they share one
+  store. `store.py` auto-detects: Postgres when `DATABASE_URL` is set, SQLite
+  locally. No dashboard step needed for the DB.
+- **Secrets:** never commit `.env`; set Twilio/weather/Claude keys in the Render dashboard.
 - **Opt-out + rate limits** on reminders before mass sends.
 - **Agronomist sign-off** on `crops.csv` before farmers act on the advice.
 

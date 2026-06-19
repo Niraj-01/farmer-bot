@@ -2,6 +2,13 @@
 # 1. Push this repo to GitHub.
 # 2. Render → New → Blueprint → pick the repo. It reads this file.
 # 3. Add your secret env vars in the dashboard (see .env.example).
+# Shared Postgres so the web service and the cron see the same farmers.
+# (On Render's free tier each service has its own ephemeral disk, so a local
+#  SQLite file would NOT be shared — hence a real database.)
+databases:
+  - name: farmer-db
+    plan: free
+
 services:
   - type: web
     name: farmer-whatsapp-bot
@@ -12,6 +19,11 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: "3.12.4"
+      # Shared database connection — wired in automatically, no dashboard step.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: farmer-db
+          property: connectionString
       # Set these as secrets in the Render dashboard (do NOT commit real values):
       - key: TWILIO_ACCOUNT_SID
         sync: false
@@ -33,6 +45,11 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: python reminders.py
     envVars:
+      # Same database as the web service, so reminders see chat registrations.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: farmer-db
+          property: connectionString
       - key: TWILIO_ACCOUNT_SID
         sync: false
       - key: TWILIO_AUTH_TOKEN
