@@ -1,0 +1,40 @@
+crop,stage,task,task_mr,task_hi,das_start,das_end,input_qty,notes
+cotton,Germination,First irrigation,पहिलं पाणी द्या,पहली सिंचाई करें,8,10,,Keep soil moist for sprouting
+cotton,Germination,Gap filling,नांगी भरणी करा,गैप फिलिंग करें,12,15,,Re-sow where seeds failed
+cotton,Vegetative,First weeding,पहिली तण काढणी,पहली निराई,15,20,,Remove weeds around plants
+cotton,Vegetative,Urea 1st dose,युरिया पहिला डोस,यूरिया पहली खुराक,20,25,50 kg/acre,Nitrogen for growth
+cotton,Vegetative,Second weeding,दुसरी तण काढणी,दूसरी निराई,30,35,,
+cotton,Tillering,Urea 2nd dose,युरिया दुसरा डोस,यूरिया दूसरी खुराक,40,45,50 kg/acre,Split nitrogen dose
+cotton,Flowering,Pest scouting begin,किडीची तपासणी सुरू करा,कीट निगरानी शुरू करें,45,50,,Watch for bollworm
+cotton,Flowering,Critical irrigation,महत्त्वाचं पाणी द्या,महत्वपूर्ण सिंचाई,50,55,,Do not skip water at flowering
+cotton,Flowering,Micronutrient spray,सूक्ष्म अन्नद्रव्य फवारणी,सूक्ष्म पोषक छिड़काव,55,60,,Boron + zinc
+cotton,Fruiting,Potassium dose,पोटॅश खत द्या,पोटाश खुराक,70,75,25 kg/acre,For boll development
+cotton,Fruiting,Pest control spray,किडीची फवारणी,कीट नियंत्रण छिड़काव,75,85,,If bollworm seen
+cotton,Maturity,Stop irrigation,पाणी बंद करा,सिंचाई बंद करें,130,135,,Let bolls dry
+cotton,Harvest,First picking,पहिली वेचणी,पहली तुड़ाई,150,160,,Pick open bolls
+soybean,Germination,First irrigation,पहिलं पाणी द्या,पहली सिंचाई,5,7,,If no rain
+soybean,Germination,Gap filling,नांगी भरणी,गैप फिलिंग,10,12,,
+soybean,Vegetative,First weeding,पहिली तण काढणी,पहली निराई,15,20,,
+soybean,Vegetative,Fertilizer dose,खत द्या,खाद डालें,20,25,DAP 50 kg/acre,
+soybean,Flowering,Pest scouting,किडीची तपासणी,कीट निगरानी,35,40,,Watch for girdle beetle
+soybean,Flowering,Critical irrigation,महत्त्वाचं पाणी,महत्वपूर्ण सिंचाई,40,45,,Flowering needs water
+soybean,Pod filling,Foliar spray,फवारणी करा,छिड़काव,55,60,,Nutrient spray for pods
+soybean,Maturity,Stop irrigation,पाणी बंद करा,सिंचाई बंद,80,85,,
+soybean,Harvest,Harvesting,काढणी करा,कटाई करें,95,105,,When pods turn brown
+wheat,Germination,First irrigation (CRI),पहिलं पाणी (मुकुट मूळ),पहली सिंचाई (CRI),18,21,,Crown root stage - critical
+wheat,Vegetative,First weeding,पहिली तण काढणी,पहली निराई,25,30,,
+wheat,Vegetative,Urea 1st dose,युरिया पहिला डोस,यूरिया पहली खुराक,21,25,50 kg/acre,
+wheat,Tillering,Second irrigation,दुसरं पाणी,दूसरी सिंचाई,40,45,,Tillering stage
+wheat,Tillering,Urea 2nd dose,युरिया दुसरा डोस,यूरिया दूसरी खुराक,45,50,40 kg/acre,
+wheat,Flowering,Irrigation at flowering,फुलोऱ्यात पाणी,फूल आने पर सिंचाई,65,70,,
+wheat,Grain filling,Irrigation,दाणे भरताना पाणी,दाना भरते समय सिंचाई,85,90,,
+wheat,Maturity,Stop irrigation,पाणी बंद करा,सिंचाई बंद,105,110,,
+wheat,Harvest,Harvesting,काढणी करा,कटाई करें,120,130,,When grains hard
+tur,Germination,First irrigation,पहिलं पाणी,पहली सिंचाई,8,10,,If no rain
+tur,Vegetative,First weeding,पहिली तण काढणी,पहली निराई,20,25,,
+tur,Vegetative,Fertilizer dose,खत द्या,खाद डालें,25,30,DAP 50 kg/acre,
+tur,Flowering,Pest scouting,किडीची तपासणी,कीट निगरानी,60,70,,Watch for pod borer
+tur,Flowering,Critical irrigation,महत्त्वाचं पाणी,महत्वपूर्ण सिंचाई,70,80,,
+tur,Pod filling,Pest control spray,किडीची फवारणी,कीट नियंत्रण छिड़काव,90,100,,Pod borer control
+tur,Maturity,Stop irrigation,पाणी बंद करा,सिंचाई बंद,140,150,,
+tur,Harvest,Harvesting,काढणी करा,कटाई करें,160,180,,When pods dry

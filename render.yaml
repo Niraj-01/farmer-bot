@@ -1,0 +1,43 @@
+# Render.com blueprint — deploys the bot + the daily reminder cron.
+# 1. Push this repo to GitHub.
+# 2. Render → New → Blueprint → pick the repo. It reads this file.
+# 3. Add your secret env vars in the dashboard (see .env.example).
+services:
+  - type: web
+    name: farmer-whatsapp-bot
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.4"
+      # Set these as secrets in the Render dashboard (do NOT commit real values):
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_WHATSAPP_FROM
+        sync: false
+      - key: OPENWEATHER_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+
+  # Daily proactive reminders at 06:00 UTC (11:30 AM IST).
+  - type: cron
+    name: farmer-reminders
+    runtime: python
+    plan: free
+    schedule: "0 6 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python reminders.py
+    envVars:
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_WHATSAPP_FROM
+        sync: false
+      - key: OPENWEATHER_API_KEY
+        sync: false
