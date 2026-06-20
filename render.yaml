@@ -1,10 +1,13 @@
-# Render.com blueprint — deploys the bot + the daily reminder cron.
+# Render.com blueprint — deploys the bot on the FREE plan.
 # 1. Push this repo to GitHub.
 # 2. Render → New → Blueprint → pick the repo. It reads this file.
 # 3. Add your secret env vars in the dashboard (see .env.example).
-# Shared Postgres so the web service and the cron see the same farmers.
-# (On Render's free tier each service has its own ephemeral disk, so a local
-#  SQLite file would NOT be shared — hence a real database.)
+#
+# NOTE: Render's `cron` service type is NOT free, so the daily reminder is run
+# instead by hitting the web app's /cron/reminders?key=CRON_SECRET endpoint from
+# a FREE external scheduler (e.g. cron-job.org or a GitHub Actions schedule).
+#
+# Shared Postgres so the web service and any reminder run see the same farmers.
 databases:
   - name: farmer-db
     plan: free
@@ -35,26 +38,7 @@ services:
         sync: false
       - key: ANTHROPIC_API_KEY
         sync: false
-
-  # Daily proactive reminders at 06:00 UTC (11:30 AM IST).
-  - type: cron
-    name: farmer-reminders
-    runtime: python
-    plan: free
-    schedule: "0 6 * * *"
-    buildCommand: pip install -r requirements.txt
-    startCommand: python reminders.py
-    envVars:
-      # Same database as the web service, so reminders see chat registrations.
-      - key: DATABASE_URL
-        fromDatabase:
-          name: farmer-db
-          property: connectionString
-      - key: TWILIO_ACCOUNT_SID
-        sync: false
-      - key: TWILIO_AUTH_TOKEN
-        sync: false
-      - key: TWILIO_WHATSAPP_FROM
-        sync: false
-      - key: OPENWEATHER_API_KEY
+      # Secret that protects the /cron/reminders endpoint. Set any random string
+      # in the dashboard, then use the same value in your external scheduler URL.
+      - key: CRON_SECRET
         sync: false

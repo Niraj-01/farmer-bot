@@ -196,6 +196,20 @@ def demo():
     return DEMO_HTML
 
 
+@app.route("/cron/reminders", methods=["GET", "POST"])
+def cron_reminders():
+    """Run the daily reminder job. Triggered by a free external scheduler
+    (cron-job.org / GitHub Actions) since Render's cron service isn't free.
+    Protected by a shared secret so randoms can't trigger sends."""
+    import reminders
+    secret = os.getenv("CRON_SECRET")
+    if secret and request.args.get("key") != secret:
+        return ("forbidden", 403)
+    dry = request.args.get("dry") == "1"
+    reminders.run(dry=dry)
+    return {"ok": True, "dry": dry}
+
+
 @app.route("/", methods=["GET"])
 def health():
     return "Farmer WhatsApp bot is running ✅  →  open /demo for the browser chat"
