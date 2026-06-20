@@ -82,15 +82,24 @@ def transcribe_bhashini(media_url, source_lang="mr"):
 
 
 # ---------- 2. Weather alert ----------
-def weather_alert(district):
+RAIN_ALERT = {
+    "mr": "⚠️ पुढील २४ तासात पाऊस आहे ☔ — फवारणी पुढे ढकला.",
+    "hi": "⚠️ अगले 24 घंटे में बारिश है ☔ — छिड़काव टालें।",
+    "en": "⚠️ Rain expected in next 24h ☔ — delay spraying.",
+}
+
+
+def weather_alert(district, lang="mr"):
     """
-    Check forecast for the district. If rain expected, return a spray-delay alert.
-    Demo fallback: if no API key, return a canned alert so the 'smart' moment works.
+    Check forecast for the district. If rain expected, return a spray-delay alert
+    in the farmer's language. Demo fallback: if no API key, return a canned alert
+    so the 'smart' moment still works.
     """
+    alert_text = RAIN_ALERT.get(lang, RAIN_ALERT["mr"])
     api_key = os.getenv("OPENWEATHER_API_KEY")
     if not api_key or not district:
         # Canned demo alert — comment out for a fully live demo.
-        return "⚠️ उद्या पाऊस आहे ☔ — फवारणी २ दिवस पुढे ढकला."
+        return alert_text
     try:
         geo = requests.get(
             "http://api.openweathermap.org/geo/1.0/direct",
@@ -111,7 +120,7 @@ def weather_alert(district):
             for slot in fc.get("list", [])[:8]
         )
         if rain_soon:
-            return "⚠️ पुढील २४ तासात पाऊस आहे ☔ — फवारणी पुढे ढकला."
+            return alert_text
         return ""
     except Exception as e:
         print("weather error:", e)

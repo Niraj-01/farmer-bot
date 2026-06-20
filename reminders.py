@@ -14,8 +14,14 @@ import store
 import schedule as sch
 from helpers import weather_alert
 
-LANG = "mr"
+DEFAULT_LANG = "mr"
 LOOKAHEAD_DAYS = 2  # remind when a task is within this many days
+
+REMINDER_HDR = {
+    "mr": "🔔 आठवण ({crop})\nपुढील कामे:",
+    "hi": "🔔 याद दिलाना ({crop})\nअगले काम:",
+    "en": "🔔 Reminder ({crop})\nUpcoming tasks:",
+}
 
 
 def due_tasks(crop, sowing_date, today):
@@ -25,19 +31,21 @@ def due_tasks(crop, sowing_date, today):
 
 
 def build_reminder(farmer, today):
+    lang = farmer.get("lang") or DEFAULT_LANG
     crop = farmer["crop"]
     sow = date.fromisoformat(farmer["sowing_date"])
     due = due_tasks(crop, sow, today)
     if not due:
         return None
-    crop_name = sch.CROPS[crop][LANG]
+    crop_name = sch.CROPS[crop][lang]
     lines = []
     for t in due:
-        name = t.get(f"task_{LANG}") or t["task"]
+        name = t.get(f"task_{lang}") or t["task"]
         qty = f" ({t['input_qty']})" if t["input_qty"] else ""
         lines.append(f"• *{t['date_start'].strftime('%d %b')}* — {name}{qty}")
-    msg = f"🔔 आठवण ({crop_name})\nपुढील कामे:\n" + "\n".join(lines)
-    alert = weather_alert(farmer.get("district", ""))
+    hdr = REMINDER_HDR.get(lang, REMINDER_HDR["mr"]).format(crop=crop_name)
+    msg = hdr + "\n" + "\n".join(lines)
+    alert = weather_alert(farmer.get("district", ""), lang)
     if alert:
         msg += "\n\n" + alert
     return msg
