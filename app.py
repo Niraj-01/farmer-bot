@@ -42,6 +42,16 @@ ASK_IRRIGATION = {
     "hi": "💧 क्या आपके पास सिंचाई की सुविधा है?\n\n1️⃣ हाँ\n2️⃣ नहीं",
     "en": "💧 Do you have irrigation?\n\n1️⃣ Yes\n2️⃣ No",
 }
+STOP_REPLY = {
+    "mr": "🔕 ठीक आहे, मी आता आठवणी पाठवणार नाही. पुन्हा सुरू करण्यासाठी 'पुन्हा सुरू' लिहा.",
+    "hi": "🔕 ठीक है, अब मैं रिमाइंडर नहीं भेजूंगा। फिर से शुरू करने के लिए 'resume' लिखें।",
+    "en": "🔕 Okay, I won't send reminders anymore. Reply 'start reminders' to resume.",
+}
+RESUME_REPLY = {
+    "mr": "🔔 छान! मी पुन्हा आठवणी पाठवेन.",
+    "hi": "🔔 बढ़िया! मैं फिर से रिमाइंडर भेजूंगा।",
+    "en": "🔔 Great! I'll send reminders again.",
+}
 
 
 def handle_message(num, body, media_url=None, media_type=None):
@@ -62,6 +72,15 @@ def _route(s, body, media_url=None, media_type=None):
         body = transcribe_voice(media_url) or body
 
     step = s["step"]
+
+    # Opt-out (WhatsApp policy: farmers must be able to stop proactive messages).
+    if body.lower() in ("stop", "unsubscribe", "बंद", "थांबा", "band", "रोको"):
+        s["opted_out"] = True
+        return STOP_REPLY[LANG]
+    # Re-subscribe.
+    if body.lower() in ("start reminders", "पुन्हा सुरू", "resume", "subscribe"):
+        s["opted_out"] = False
+        return RESUME_REPLY[LANG]
 
     # Allow restart anytime
     if body.lower() in ("hi", "hello", "start", "नमस्कार", "namaskar", "restart"):

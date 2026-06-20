@@ -106,9 +106,20 @@ def save(phone, session):
 
 
 def all_active():
-    """Farmers who finished onboarding (have a crop + sowing date)."""
+    """Onboarded farmers who have NOT opted out of reminders.
+
+    `opted_out` is stored inside the JSON `data` column, so we filter in Python
+    after expanding it (keeps the schema unchanged across SQLite/Postgres).
+    """
     init()
-    return _run(
+    rows = _run(
         "SELECT * FROM farmers WHERE step='done' AND sowing_date IS NOT NULL",
         fetch="all",
-    )
+    ) or []
+    out = []
+    for r in rows:
+        if r.get("data"):
+            r.update(json.loads(r["data"]))
+        if not r.get("opted_out"):
+            out.append(r)
+    return out

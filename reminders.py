@@ -57,6 +57,11 @@ def run(dry=False):
     print(f"{today}: checking {len(farmers)} farmer(s)...")
     sent = 0
     for f in farmers:
+        # Rate limit: never message the same farmer twice in one day, even if
+        # the cron is triggered more than once.
+        if not dry and f.get("last_reminded") == today.isoformat():
+            print(f"skip {f['phone']} (already reminded today)")
+            continue
         msg = build_reminder(f, today)
         if not msg:
             continue
@@ -65,6 +70,8 @@ def run(dry=False):
         else:
             try:
                 send_whatsapp(f["phone"], msg)
+                f["last_reminded"] = today.isoformat()
+                store.save(f["phone"], f)
                 print(f"sent to {f['phone']}")
             except Exception as e:
                 print(f"failed {f['phone']}: {e}")

@@ -61,7 +61,9 @@ review (typically several days). Start this in parallel once the client says go.
   store. `store.py` auto-detects: Postgres when `DATABASE_URL` is set, SQLite
   locally. No dashboard step needed for the DB.
 - **Secrets:** never commit `.env`; set Twilio/weather/Claude keys in the Render dashboard.
-- **Opt-out + rate limits** on reminders before mass sends.
+- **Opt-out + rate limits:** ✅ Done. Farmers reply `stop` (or `बंद`/`थांबा`) to
+  unsubscribe and `resume` to opt back in; the cron skips opted-out farmers and
+  never messages anyone twice in the same day.
 - **Agronomist sign-off** on `crops.csv` before farmers act on the advice.
 
 ---
