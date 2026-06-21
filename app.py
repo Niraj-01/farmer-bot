@@ -153,14 +153,21 @@ def _route(s, body, media_url=None, media_type=None):
 
     step = s["step"]
 
-    # First contact -> ask language.
-    if step in ("start", "lang") and not body:
-        s["step"] = "lang"
-        return ASK_LANG
-
-    if step == "lang":
+    # Language selection. This covers the very first contact ("start") AND an
+    # explicit switch ("lang"), so the next message is always read as the choice.
+    if step in ("start", "lang"):
+        if not body:
+            s["step"] = "lang"
+            return ASK_LANG
         chosen = LANG_BY_NUM.get(body) or LANG_BY_NAME.get(low)
         if not chosen:
+            # Accept spoken/typed names inside a longer phrase, e.g. "english please".
+            for name, code in LANG_BY_NAME.items():
+                if name in low:
+                    chosen = code
+                    break
+        if not chosen:
+            s["step"] = "lang"
             return ASK_LANG
         s["lang"] = chosen
         # If already onboarded, just confirm and show the plan in the new language.
